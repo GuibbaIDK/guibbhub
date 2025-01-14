@@ -32,7 +32,7 @@ RollbackButton.MouseButton1Click:Connect(function()
     RollbackButton.Text = "Rollback Ativado"
     print("Rollback ativado!")
 
-    -- Salva os valores atuais como "estado inicial"
+    -- Salva os valores atuais como "estado inicial" (excluindo o tempo jogado)
     if game.Players.LocalPlayer:FindFirstChild("leaderstats") then
         for _, v in pairs(game.Players.LocalPlayer.leaderstats:GetChildren()) do
             if v:IsA("IntValue") or v:IsA("NumberValue") then
@@ -58,6 +58,7 @@ local oldIndex = mt.__newindex
 
 setreadonly(mt, false)
 mt.__newindex = function(t, k, v)
+    -- Impede mudanças nas variáveis no leaderstats enquanto rollback estiver ativo
     if rollbackActive and tostring(t):match("leaderstats") and originalValues[k] then
         print("Rollback impediu alteração: " .. tostring(k) .. " -> " .. tostring(v))  -- Log de Debug
         return
